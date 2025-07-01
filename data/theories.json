@@ -1,0 +1,1449 @@
+{
+  "urban_theories": [
+    {
+      "id": "garden_city",
+      "name": "Garden City Theory",
+      "year": 1898,
+      "primary_authors": ["Ebenezer Howard"],
+      "category": "Design",
+      "principles": [
+        "Self-contained communities surrounded by greenbelts",
+        "Balance between city and country living",
+        "Cooperative land ownership",
+        "Limited population size (32,000)",
+        "Concentric zoning with parks and open spaces",
+        "Connected by railways to central city"
+      ],
+      "computational_requirements": [
+        "spatial_analysis",
+        "optimization",
+        "pattern_recognition",
+        "network_analysis"
+      ],
+      "key_concepts": {
+        "population_limit": 32000,
+        "greenbelt_ratio": 0.5,
+        "residential_industrial_balance": true,
+        "cooperative_ownership": true
+      },
+      "application_contexts": [
+        "new_town_development",
+        "sustainable_communities",
+        "urban_expansion_control",
+        "green_infrastructure_planning"
+      ],
+      "related_theories": ["New Urbanism", "Transit-Oriented Development"],
+      "modern_relevance": "Influences eco-city design and sustainable urban development"
+    },
+    {
+      "id": "neighborhood_unit",
+      "name": "Neighborhood Unit Concept",
+      "year": 1929,
+      "primary_authors": ["Clarence Perry"],
+      "category": "Design",
+      "principles": [
+        "Elementary school as neighborhood center",
+        "5-minute walking radius (1/4 mile)",
+        "Arterial streets at boundaries",
+        "Local streets discourage through traffic",
+        "10% land for parks and recreation",
+        "Local shopping at edges"
+      ],
+      "computational_requirements": [
+        "spatial_analysis",
+        "network_analysis",
+        "accessibility_modeling",
+        "pedestrian_flow_analysis"
+      ],
+      "key_concepts": {
+        "walking_radius_meters": 400,
+        "population_size": "5000-9000",
+        "park_percentage": 10,
+        "school_centered": true
+      },
+      "application_contexts": [
+        "residential_planning",
+        "walkable_neighborhoods",
+        "school_siting",
+        "community_facility_planning"
+      ],
+      "related_theories": ["New Urbanism", "Complete Streets"],
+      "modern_relevance": "Foundation for 15-minute city concepts"
+    },
+    {
+      "id": "radiant_city",
+      "name": "Radiant City (Ville Radieuse)",
+      "year": 1935,
+      "primary_authors": ["Le Corbusier"],
+      "category": "Design",
+      "principles": [
+        "High-rise residential towers in parks",
+        "Separation of functions (living, working, recreation)",
+        "Automobile-oriented transportation",
+        "Abundant green space between buildings",
+        "Standardized housing units",
+        "Geometric urban layout"
+      ],
+      "computational_requirements": [
+        "3d_modeling",
+        "sunlight_analysis",
+        "wind_flow_simulation",
+        "density_optimization"
+      ],
+      "key_concepts": {
+        "building_height": "60+ meters",
+        "ground_coverage": 0.15,
+        "green_space_ratio": 0.85,
+        "functional_separation": true
+      },
+      "application_contexts": [
+        "high_density_housing",
+        "urban_renewal",
+        "modernist_planning",
+        "tower_in_park_design"
+      ],
+      "related_theories": ["Organic City Theory"],
+      "modern_relevance": "Critiqued but influences high-density sustainable design"
+    },
+    {
+      "id": "organic_city",
+      "name": "Organic City Theory",
+      "year": 1961,
+      "primary_authors": ["Jane Jacobs"],
+      "category": "Design",
+      "principles": [
+        "Mixed primary uses ensuring activity throughout day",
+        "Short blocks for permeability",
+        "Buildings of varied age and condition",
+        "Sufficient density to support diversity",
+        "Eyes on the street for natural surveillance",
+        "Sidewalk ballet and spontaneous interactions"
+      ],
+      "computational_requirements": [
+        "diversity_metrics",
+        "pedestrian_flow_analysis",
+        "mixed_use_optimization",
+        "social_network_analysis",
+        "temporal_activity_patterns"
+      ],
+      "key_concepts": {
+        "block_length_max": 120,
+        "use_mix_index": 0.7,
+        "building_age_diversity": true,
+        "minimum_density": "100 units/hectare"
+      },
+      "application_contexts": [
+        "urban_regeneration",
+        "mixed_use_development",
+        "pedestrian_oriented_design",
+        "neighborhood_vitality"
+      ],
+      "related_theories": ["Eyes on the Street", "New Urbanism"],
+      "modern_relevance": "Core principles for livable, walkable neighborhoods"
+    },
+    {
+      "id": "new_urbanism",
+      "name": "New Urbanism",
+      "year": 1980,
+      "primary_authors": ["Andres Duany", "Elizabeth Plater-Zyberk"],
+      "category": "Design",
+      "principles": [
+        "Walkability and pedestrian-friendly design",
+        "Connectivity of street networks",
+        "Mixed use and diversity",
+        "Mixed housing types",
+        "Quality architecture and urban design",
+        "Traditional neighborhood structure",
+        "Increased density",
+        "Green transportation",
+        "Sustainability",
+        "Quality of life"
+      ],
+      "computational_requirements": [
+        "walkability_analysis",
+        "network_connectivity",
+        "mixed_use_optimization",
+        "form_based_coding",
+        "sustainability_metrics"
+      ],
+      "key_concepts": {
+        "walkability_score": 0.8,
+        "street_connectivity": "grid_pattern",
+        "housing_diversity_index": 0.7,
+        "transit_accessibility": true
+      },
+      "application_contexts": [
+        "suburban_retrofit",
+        "town_center_development",
+        "transit_oriented_development",
+        "sustainable_communities"
+      ],
+      "related_theories": ["Transit-Oriented Development", "Smart Growth"],
+      "modern_relevance": "Widely applied in North American suburban development"
+    },
+    {
+      "id": "transit_oriented_development",
+      "name": "Transit-Oriented Development",
+      "year": 1993,
+      "primary_authors": ["Peter Calthorpe"],
+      "category": "Design",
+      "principles": [
+        "High-density development within walking distance of transit",
+        "Mixed-use development",
+        "Pedestrian and bicycle-friendly design",
+        "Reduced parking requirements",
+        "Public spaces as community focus",
+        "Variety of housing types and prices"
+      ],
+      "computational_requirements": [
+        "accessibility_modeling",
+        "density_optimization",
+        "transit_ridership_prediction",
+        "pedestrian_flow_simulation",
+        "land_value_capture"
+      ],
+      "key_concepts": {
+        "walking_radius": 800,
+        "minimum_density": "50 units/hectare",
+        "parking_ratio": 0.5,
+        "job_housing_balance": 1.5
+      },
+      "application_contexts": [
+        "station_area_planning",
+        "urban_intensification",
+        "greenhouse_gas_reduction",
+        "affordable_housing_provision"
+      ],
+      "related_theories": ["New Urbanism", "Compact City"],
+      "modern_relevance": "Key strategy for sustainable urban growth"
+    },
+    {
+      "id": "smart_growth",
+      "name": "Smart Growth Theory",
+      "year": 1990,
+      "primary_authors": ["Multiple"],
+      "category": "Design",
+      "principles": [
+        "Mix land uses",
+        "Take advantage of compact design",
+        "Create housing choices",
+        "Create walkable neighborhoods",
+        "Foster distinctive communities",
+        "Preserve open space",
+        "Direct development toward existing communities",
+        "Provide transportation choices",
+        "Make development decisions predictable",
+        "Encourage community collaboration"
+      ],
+      "computational_requirements": [
+        "growth_boundary_modeling",
+        "infill_opportunity_analysis",
+        "multimodal_transportation",
+        "fiscal_impact_analysis",
+        "environmental_assessment"
+      ],
+      "key_concepts": {
+        "infill_percentage": 0.6,
+        "mode_share_targets": "balanced",
+        "open_space_preservation": 0.3,
+        "community_engagement": true
+      },
+      "application_contexts": [
+        "regional_planning",
+        "growth_management",
+        "climate_action_planning",
+        "fiscal_sustainability"
+      ],
+      "related_theories": ["New Urbanism", "Sustainable Urban Design"],
+      "modern_relevance": "Framework for sustainable regional development"
+    },
+    {
+      "id": "sustainable_urban_design",
+      "name": "Sustainable Urban Design",
+      "year": 1987,
+      "primary_authors": ["Brundtland Commission"],
+      "category": "Design",
+      "principles": [
+        "Meet present needs without compromising future generations",
+        "Integration of environmental, social, and economic goals",
+        "Resource efficiency and circular economy",
+        "Climate adaptation and mitigation",
+        "Biodiversity and ecosystem services",
+        "Social equity and inclusion"
+      ],
+      "computational_requirements": [
+        "life_cycle_assessment",
+        "carbon_footprint_modeling",
+        "ecosystem_service_valuation",
+        "resilience_analysis",
+        "social_impact_assessment"
+      ],
+      "key_concepts": {
+        "carbon_neutrality": true,
+        "circular_economy": true,
+        "green_infrastructure": 0.4,
+        "social_equity_index": 0.8
+      },
+      "application_contexts": [
+        "eco_district_planning",
+        "climate_action",
+        "green_building_standards",
+        "resilient_cities"
+      ],
+      "related_theories": ["Smart Growth", "Garden City"],
+      "modern_relevance": "Foundation for SDGs and climate planning"
+    },
+    {
+      "id": "livable_streets",
+      "name": "Livable Streets Theory",
+      "year": 1981,
+      "primary_authors": ["Donald Appleyard"],
+      "category": "Design",
+      "principles": [
+        "Streets as places for people, not just traffic",
+        "Traffic volume inversely related to social interaction",
+        "Environmental quality affects resident satisfaction",
+        "Street design influences sense of community",
+        "Balance mobility with livability",
+        "Protect residential areas from through traffic"
+      ],
+      "computational_requirements": [
+        "traffic_flow_modeling",
+        "noise_pollution_analysis",
+        "social_interaction_mapping",
+        "quality_of_life_metrics",
+        "pedestrian_safety_analysis"
+      ],
+      "key_concepts": {
+        "traffic_threshold": "2000 vehicles/day",
+        "social_interaction_zones": true,
+        "traffic_calming": true,
+        "environmental_quality": 0.8
+      },
+      "application_contexts": [
+        "traffic_calming",
+        "neighborhood_planning",
+        "street_redesign",
+        "community_building"
+      ],
+      "related_theories": ["Complete Streets", "Organic City Theory"],
+      "modern_relevance": "Basis for traffic calming and shared streets"
+    },
+    {
+      "id": "complete_streets",
+      "name": "Complete Streets Concept",
+      "year": 2003,
+      "primary_authors": ["Multiple"],
+      "category": "Design",
+      "principles": [
+        "Safe access for all users regardless of mode",
+        "Design for pedestrians, bicyclists, transit, and vehicles",
+        "Context-sensitive solutions",
+        "Network approach to mobility",
+        "Green infrastructure integration",
+        "Flexibility in design standards"
+      ],
+      "computational_requirements": [
+        "multimodal_level_of_service",
+        "safety_analysis",
+        "network_connectivity",
+        "accessibility_assessment",
+        "green_infrastructure_modeling"
+      ],
+      "key_concepts": {
+        "mode_equity": true,
+        "safety_metrics": "vision_zero",
+        "green_streets": true,
+        "ada_compliance": true
+      },
+      "application_contexts": [
+        "street_retrofits",
+        "new_street_design",
+        "safety_improvements",
+        "active_transportation"
+      ],
+      "related_theories": ["Livable Streets", "Transit-Oriented Development"],
+      "modern_relevance": "Standard for modern street design"
+    },
+    {
+      "id": "concentric_zone",
+      "name": "Concentric Zone Theory",
+      "year": 1925,
+      "primary_authors": ["Ernest Burgess"],
+      "category": "Spatial",
+      "principles": [
+        "Cities grow outward in concentric rings",
+        "Central Business District at core",
+        "Zone of transition surrounds CBD",
+        "Working-class residential zone",
+        "Middle-class residential zone",
+        "Commuter zone at periphery"
+      ],
+      "computational_requirements": [
+        "spatial_analysis",
+        "land_use_classification",
+        "distance_decay_modeling",
+        "socioeconomic_mapping",
+        "growth_simulation"
+      ],
+      "key_concepts": {
+        "zone_structure": "concentric",
+        "bid_rent_gradient": true,
+        "invasion_succession": true,
+        "monocentric_model": true
+      },
+      "application_contexts": [
+        "urban_structure_analysis",
+        "historical_development",
+        "land_value_assessment",
+        "social_geography"
+      ],
+      "related_theories": ["Sector Theory", "Multiple Nuclei Theory"],
+      "modern_relevance": "Historical model, modified for polycentric cities"
+    },
+    {
+      "id": "central_place",
+      "name": "Central Place Theory",
+      "year": 1933,
+      "primary_authors": ["Walter Christaller"],
+      "category": "Spatial",
+      "principles": [
+        "Hierarchical system of settlements",
+        "Hexagonal market areas",
+        "Range and threshold of goods",
+        "Higher-order places offer more services",
+        "Nesting of market areas",
+        "Transport principle, market principle, administrative principle"
+      ],
+      "computational_requirements": [
+        "network_analysis",
+        "market_area_delineation",
+        "hierarchical_clustering",
+        "accessibility_modeling",
+        "service_area_optimization"
+      ],
+      "key_concepts": {
+        "hexagonal_tessellation": true,
+        "k_values": [3, 4, 7],
+        "hierarchical_levels": 7,
+        "range_threshold": true
+      },
+      "application_contexts": [
+        "retail_location",
+        "service_delivery",
+        "settlement_planning",
+        "regional_development"
+      ],
+      "related_theories": ["Bid Rent Theory", "Growth Machine Theory"],
+      "modern_relevance": "Applied in retail analysis and service planning"
+    },
+    {
+      "id": "sector_theory",
+      "name": "Sector Theory",
+      "year": 1939,
+      "primary_authors": ["Homer Hoyt"],
+      "category": "Spatial",
+      "principles": [
+        "Cities develop in sectors along transportation routes",
+        "High-rent areas follow transportation corridors",
+        "Similar activities cluster in sectors",
+        "Sectors extend outward from CBD",
+        "Land uses follow radial patterns",
+        "Influenced by topography and transport"
+      ],
+      "computational_requirements": [
+        "directional_analysis",
+        "transportation_modeling",
+        "land_use_clustering",
+        "corridor_analysis",
+        "topographic_influence"
+      ],
+      "key_concepts": {
+        "radial_sectors": true,
+        "transport_corridors": true,
+        "directional_growth": true,
+        "topographic_constraints": true
+      },
+      "application_contexts": [
+        "urban_expansion_prediction",
+        "transportation_planning",
+        "land_use_forecasting",
+        "corridor_development"
+      ],
+      "related_theories": ["Concentric Zone Theory", "Multiple Nuclei Theory"],
+      "modern_relevance": "Explains development along transit corridors"
+    },
+    {
+      "id": "multiple_nuclei",
+      "name": "Multiple Nuclei Theory",
+      "year": 1945,
+      "primary_authors": ["Chauncy Harris", "Edward Ullman"],
+      "category": "Spatial",
+      "principles": [
+        "Cities develop around multiple centers",
+        "Land use influenced by accessibility needs",
+        "Similar activities agglomerate",
+        "Incompatible uses separate",
+        "High-rent activities occupy prime sites",
+        "Heavy industry near transportation"
+      ],
+      "computational_requirements": [
+        "cluster_analysis",
+        "accessibility_modeling",
+        "agglomeration_metrics",
+        "land_use_compatibility",
+        "multi_center_optimization"
+      ],
+      "key_concepts": {
+        "polycentricity": true,
+        "agglomeration_economies": true,
+        "land_use_compatibility": true,
+        "specialized_districts": true
+      },
+      "application_contexts": [
+        "polycentric_development",
+        "edge_city_analysis",
+        "metropolitan_planning",
+        "activity_center_planning"
+      ],
+      "related_theories": ["Polycentric Urban Theory", "Global City Theory"],
+      "modern_relevance": "Describes modern metropolitan structure"
+    },
+    {
+      "id": "bid_rent",
+      "name": "Bid Rent Theory",
+      "year": 1964,
+      "primary_authors": ["William Alonso"],
+      "category": "Spatial",
+      "principles": [
+        "Land value decreases with distance from center",
+        "Different uses have different bid-rent curves",
+        "Steepest curves locate centrally",
+        "Trade-off between accessibility and space",
+        "Competition determines land use",
+        "Transportation costs influence location"
+      ],
+      "computational_requirements": [
+        "economic_modeling",
+        "optimization",
+        "spatial_econometrics",
+        "land_value_prediction",
+        "accessibility_analysis"
+      ],
+      "key_concepts": {
+        "distance_decay": true,
+        "substitution_effect": true,
+        "equilibrium_conditions": true,
+        "utility_maximization": true
+      },
+      "application_contexts": [
+        "land_value_assessment",
+        "development_feasibility",
+        "housing_affordability",
+        "commercial_location"
+      ],
+      "related_theories": ["Central Place Theory", "Concentric Zone Theory"],
+      "modern_relevance": "Foundation for urban land economics"
+    },
+    {
+      "id": "growth_machine",
+      "name": "Growth Machine Theory",
+      "year": 1976,
+      "primary_authors": ["Harvey Molotch"],
+      "category": "Spatial",
+      "principles": [
+        "Cities as growth machines driven by land-based elites",
+        "Growth coalition of property owners and businesses",
+        "Exchange value prioritized over use value",
+        "Political economy shapes urban development",
+        "Growth ideology dominates planning",
+        "Distributional effects of growth"
+      ],
+      "computational_requirements": [
+        "stakeholder_analysis",
+        "political_network_mapping",
+        "development_pattern_analysis",
+        "equity_assessment",
+        "power_structure_modeling"
+      ],
+      "key_concepts": {
+        "growth_coalition": true,
+        "exchange_value": true,
+        "use_value": true,
+        "rentier_class": true
+      },
+      "application_contexts": [
+        "political_economy_analysis",
+        "development_politics",
+        "gentrification_studies",
+        "urban_governance"
+      ],
+      "related_theories": ["Global City Theory", "Social Disorganization Theory"],
+      "modern_relevance": "Explains urban development politics"
+    },
+    {
+      "id": "global_city",
+      "name": "Global City Theory",
+      "year": 1991,
+      "primary_authors": ["Saskia Sassen"],
+      "category": "Spatial",
+      "principles": [
+        "Command centers in global economy",
+        "Concentration of advanced producer services",
+        "Financial and business service clusters",
+        "Dual city with polarized labor markets",
+        "Transnational networks and flows",
+        "Deterritorialized economic activity"
+      ],
+      "computational_requirements": [
+        "network_analysis",
+        "flow_modeling",
+        "cluster_identification",
+        "connectivity_metrics",
+        "economic_complexity_analysis"
+      ],
+      "key_concepts": {
+        "command_functions": true,
+        "producer_services": true,
+        "network_connectivity": true,
+        "social_polarization": true
+      },
+      "application_contexts": [
+        "economic_development",
+        "international_business",
+        "metropolitan_competitiveness",
+        "innovation_districts"
+      ],
+      "related_theories": ["Multiple Nuclei Theory", "Growth Machine Theory"],
+      "modern_relevance": "Framework for global urban hierarchy"
+    },
+    {
+      "id": "space_syntax",
+      "name": "Space Syntax Theory",
+      "year": 1984,
+      "primary_authors": ["Bill Hillier"],
+      "category": "Spatial",
+      "principles": [
+        "Configuration of space shapes movement",
+        "Integration and connectivity metrics",
+        "Natural movement through spatial layout",
+        "Visual graph analysis",
+        "Axial lines and convex spaces",
+        "Syntactic properties predict use"
+      ],
+      "computational_requirements": [
+        "graph_analysis",
+        "visibility_analysis",
+        "network_metrics",
+        "movement_prediction",
+        "spatial_configuration_modeling"
+      ],
+      "key_concepts": {
+        "integration": true,
+        "connectivity": true,
+        "axial_map": true,
+        "visibility_graph": true
+      },
+      "application_contexts": [
+        "pedestrian_movement",
+        "crime_prevention",
+        "wayfinding_design",
+        "retail_location"
+      ],
+      "related_theories": ["CPTED", "Pattern Language"],
+      "modern_relevance": "Used in architectural and urban design"
+    },
+    {
+      "id": "compact_city",
+      "name": "Compact City Theory",
+      "year": 1973,
+      "primary_authors": ["George Dantzig", "Thomas Saaty"],
+      "category": "Spatial",
+      "principles": [
+        "High density to reduce sprawl",
+        "Mixed use for proximity",
+        "Public transport viability",
+        "Reduced infrastructure costs",
+        "Energy efficiency",
+        "Preservation of countryside"
+      ],
+      "computational_requirements": [
+        "density_optimization",
+        "accessibility_modeling",
+        "infrastructure_costing",
+        "energy_simulation",
+        "land_use_efficiency"
+      ],
+      "key_concepts": {
+        "optimal_density": "100-200 persons/hectare",
+        "mixed_use_index": 0.8,
+        "transit_viability": true,
+        "infrastructure_efficiency": true
+      },
+      "application_contexts": [
+        "growth_management",
+        "sustainable_development",
+        "infrastructure_planning",
+        "climate_mitigation"
+      ],
+      "related_theories": ["Transit-Oriented Development", "Smart Growth"],
+      "modern_relevance": "Key strategy for sustainable urbanization"
+    },
+    {
+      "id": "polycentric_urban",
+      "name": "Polycentric Urban Theory",
+      "year": 1990,
+      "primary_authors": ["Multiple"],
+      "category": "Spatial",
+      "principles": [
+        "Multiple centers of activity",
+        "Functional specialization of centers",
+        "Network relationships between centers",
+        "Reduced congestion through distribution",
+        "Complementarity between centers",
+        "Hierarchical and heterarchical structures"
+      ],
+      "computational_requirements": [
+        "multi_center_identification",
+        "functional_analysis",
+        "network_flow_modeling",
+        "accessibility_assessment",
+        "complementarity_analysis"
+      ],
+      "key_concepts": {
+        "morphological_polycentricity": true,
+        "functional_polycentricity": true,
+        "network_efficiency": true,
+        "center_specialization": true
+      },
+      "application_contexts": [
+        "metropolitan_planning",
+        "regional_development",
+        "transport_planning",
+        "economic_clustering"
+      ],
+      "related_theories": ["Multiple Nuclei Theory", "Central Place Theory"],
+      "modern_relevance": "Model for large metropolitan regions"
+    },
+    {
+      "id": "eyes_on_street",
+      "name": "Eyes on the Street",
+      "year": 1961,
+      "primary_authors": ["Jane Jacobs"],
+      "category": "Safety",
+      "principles": [
+        "Natural surveillance from residents and passersby",
+        "Clear demarcation of public and private space",
+        "Continuous use generates watchers",
+        "Mixed uses ensure activity throughout day",
+        "Windows and entrances facing street",
+        "Active ground floor uses"
+      ],
+      "computational_requirements": [
+        "visibility_analysis",
+        "activity_pattern_modeling",
+        "surveillance_mapping",
+        "temporal_analysis",
+        "façade_analysis"
+      ],
+      "key_concepts": {
+        "natural_surveillance": true,
+        "activity_diversity": true,
+        "public_private_clarity": true,
+        "temporal_coverage": "18 hours"
+      },
+      "application_contexts": [
+        "crime_prevention",
+        "street_design",
+        "mixed_use_planning",
+        "public_safety"
+      ],
+      "related_theories": ["CPTED", "Defensible Space", "Organic City Theory"],
+      "modern_relevance": "Foundation for crime prevention through design"
+    },
+    {
+      "id": "defensible_space",
+      "name": "Defensible Space Theory",
+      "year": 1972,
+      "primary_authors": ["Oscar Newman"],
+      "category": "Safety",
+      "principles": [
+        "Territoriality through design",
+        "Natural surveillance opportunities",
+        "Image and milieu of safety",
+        "Geographical juxtaposition with safe areas",
+        "Hierarchy of spaces from private to public",
+        "Resident control of semi-public spaces"
+      ],
+      "computational_requirements": [
+        "territory_mapping",
+        "visibility_analysis",
+        "access_control_modeling",
+        "spatial_hierarchy_analysis",
+        "crime_risk_assessment"
+      ],
+      "key_concepts": {
+        "territorial_hierarchy": true,
+        "symbolic_barriers": true,
+        "surveillance_zones": true,
+        "activity_generators": true
+      },
+      "application_contexts": [
+        "housing_design",
+        "public_housing_safety",
+        "neighborhood_planning",
+        "crime_reduction"
+      ],
+      "related_theories": ["CPTED", "Eyes on the Street"],
+      "modern_relevance": "Influences secure residential design"
+    },
+    {
+      "id": "cpted_gen1",
+      "name": "CPTED (1st Generation)",
+      "year": 1971,
+      "primary_authors": ["C. Ray Jeffery"],
+      "category": "Safety",
+      "principles": [
+        "Natural surveillance through physical design",
+        "Natural access control",
+        "Territorial reinforcement",
+        "Maintenance and management",
+        "Legitimate activity support",
+        "Target hardening"
+      ],
+      "computational_requirements": [
+        "crime_pattern_analysis",
+        "environmental_assessment",
+        "visibility_modeling",
+        "access_analysis",
+        "vulnerability_mapping"
+      ],
+      "key_concepts": {
+        "3d_approach": true,
+        "environmental_design": true,
+        "opportunity_reduction": true,
+        "physical_security": true
+      },
+      "application_contexts": [
+        "security_planning",
+        "urban_design",
+        "facility_planning",
+        "public_space_safety"
+      ],
+      "related_theories": ["Defensible Space", "Situational Crime Prevention"],
+      "modern_relevance": "Standard for security-conscious design"
+    },
+    {
+      "id": "cpted_gen2",
+      "name": "CPTED (2nd Generation)",
+      "year": 1998,
+      "primary_authors": ["Gregory Saville", "Gerry Cleveland"],
+      "category": "Safety",
+      "principles": [
+        "Social cohesion beyond physical design",
+        "Community connectivity",
+        "Community culture",
+        "Threshold capacity for diversity",
+        "Social ecology approach",
+        "Participatory planning"
+      ],
+      "computational_requirements": [
+        "social_network_analysis",
+        "community_cohesion_metrics",
+        "participation_modeling",
+        "cultural_mapping",
+        "capacity_analysis"
+      ],
+      "key_concepts": {
+        "social_capital": true,
+        "collective_efficacy": true,
+        "community_capacity": true,
+        "cultural_strategies": true
+      },
+      "application_contexts": [
+        "community_development",
+        "neighborhood_safety",
+        "social_programs",
+        "participatory_design"
+      ],
+      "related_theories": ["Social Disorganization Theory", "CPTED Gen1"],
+      "modern_relevance": "Holistic approach to community safety"
+    },
+    {
+      "id": "broken_windows",
+      "name": "Broken Windows Theory",
+      "year": 1982,
+      "primary_authors": ["James Wilson", "George Kelling"],
+      "category": "Safety",
+      "principles": [
+        "Visible signs of disorder encourage crime",
+        "Minor disorders escalate if unchecked",
+        "Maintenance prevents deterioration",
+        "Police focus on quality of life issues",
+        "Community standards must be maintained",
+        "Swift response to minor infractions"
+      ],
+      "computational_requirements": [
+        "disorder_detection",
+        "deterioration_modeling",
+        "maintenance_optimization",
+        "patrol_allocation",
+        "community_monitoring"
+      ],
+      "key_concepts": {
+        "disorder_crime_link": true,
+        "maintenance_priority": true,
+        "community_policing": true,
+        "quality_of_life": true
+      },
+      "application_contexts": [
+        "policing_strategies",
+        "neighborhood_maintenance",
+        "code_enforcement",
+        "community_standards"
+      ],
+      "related_theories": ["Social Disorganization Theory", "CPTED"],
+      "modern_relevance": "Controversial but influences maintenance policies"
+    },
+    {
+      "id": "routine_activity",
+      "name": "Routine Activity Theory",
+      "year": 1979,
+      "primary_authors": ["Lawrence Cohen", "Marcus Felson"],
+      "category": "Safety",
+      "principles": [
+        "Crime requires motivated offender, suitable target, lack of guardian",
+        "Routine activities create crime opportunities",
+        "Temporal and spatial patterns of activity",
+        "Guardianship prevents crime",
+        "Target attractiveness varies",
+        "Convergence in time and space"
+      ],
+      "computational_requirements": [
+        "spatio_temporal_analysis",
+        "activity_pattern_modeling",
+        "risk_assessment",
+        "guardian_placement",
+        "hotspot_prediction"
+      ],
+      "key_concepts": {
+        "crime_triangle": true,
+        "convergence_settings": true,
+        "guardianship_types": true,
+        "target_suitability": true
+      },
+      "application_contexts": [
+        "crime_analysis",
+        "patrol_deployment",
+        "situational_prevention",
+        "risk_assessment"
+      ],
+      "related_theories": ["Crime Pattern Theory", "Situational Crime Prevention"],
+      "modern_relevance": "Foundation for predictive policing"
+    },
+    {
+      "id": "situational_crime_prevention",
+      "name": "Situational Crime Prevention",
+      "year": 1983,
+      "primary_authors": ["Ronald Clarke"],
+      "category": "Safety",
+      "principles": [
+        "Increase effort required for crime",
+        "Increase risks of detection",
+        "Reduce rewards from crime",
+        "Reduce provocations",
+        "Remove excuses for crime",
+        "25 techniques across 5 categories"
+      ],
+      "computational_requirements": [
+        "technique_selection",
+        "effectiveness_modeling",
+        "cost_benefit_analysis",
+        "displacement_analysis",
+        "crime_specific_modeling"
+      ],
+      "key_concepts": {
+        "opportunity_reduction": true,
+        "rational_choice": true,
+        "technique_matrix": true,
+        "displacement_effects": true
+      },
+      "application_contexts": [
+        "security_design",
+        "retail_loss_prevention",
+        "public_facility_safety",
+        "crime_specific_solutions"
+      ],
+      "related_theories": ["CPTED", "Routine Activity Theory"],
+      "modern_relevance": "Practical framework for crime prevention"
+    },
+    {
+      "id": "crime_pattern",
+      "name": "Crime Pattern Theory",
+      "year": 1993,
+      "primary_authors": ["Patricia Brantingham", "Paul Brantingham"],
+      "category": "Safety",
+      "principles": [
+        "Crime occurs in patterns not randomly",
+        "Activity nodes, paths, and edges",
+        "Awareness space of offenders",
+        "Crime generators and attractors",
+        "Distance decay in offending",
+        "Environmental backcloth"
+      ],
+      "computational_requirements": [
+        "pattern_detection",
+        "journey_to_crime_analysis",
+        "node_path_edge_mapping",
+        "spatial_clustering",
+        "movement_pattern_analysis"
+      ],
+      "key_concepts": {
+        "activity_space": true,
+        "crime_generators": true,
+        "crime_attractors": true,
+        "edge_effects": true
+      },
+      "application_contexts": [
+        "crime_mapping",
+        "hotspot_analysis",
+        "offender_profiling",
+        "environmental_criminology"
+      ],
+      "related_theories": ["Environmental Criminology", "Routine Activity Theory"],
+      "modern_relevance": "Basis for crime mapping and analysis"
+    },
+    {
+      "id": "social_disorganization",
+      "name": "Social Disorganization Theory",
+      "year": 1942,
+      "primary_authors": ["Clifford Shaw", "Henry McKay"],
+      "category": "Safety",
+      "principles": [
+        "Neighborhood characteristics affect crime rates",
+        "Poverty, heterogeneity, mobility weaken control",
+        "Breakdown of social institutions",
+        "Intergenerational transmission of deviance",
+        "Ecological factors shape behavior",
+        "Community-level interventions needed"
+      ],
+      "computational_requirements": [
+        "neighborhood_metrics",
+        "social_cohesion_analysis",
+        "demographic_modeling",
+        "institutional_mapping",
+        "longitudinal_analysis"
+      ],
+      "key_concepts": {
+        "collective_efficacy": true,
+        "social_capital": true,
+        "concentrated_disadvantage": true,
+        "residential_stability": true
+      },
+      "application_contexts": [
+        "community_policing",
+        "neighborhood_revitalization",
+        "youth_programs",
+        "social_services"
+      ],
+      "related_theories": ["Broken Windows Theory", "CPTED Gen2"],
+      "modern_relevance": "Explains neighborhood crime variations"
+    },
+    {
+      "id": "environmental_criminology",
+      "name": "Environmental Criminology",
+      "year": 1981,
+      "primary_authors": ["Patricia Brantingham", "Paul Brantingham"],
+      "category": "Safety",
+      "principles": [
+        "Physical environment influences crime",
+        "Crime events in space and time",
+        "Environmental design affects behavior",
+        "Situational factors crucial",
+        "Place-based crime prevention",
+        "Micro-level spatial analysis"
+      ],
+      "computational_requirements": [
+        "micro_spatial_analysis",
+        "environmental_scanning",
+        "behavioral_mapping",
+        "place_based_modeling",
+        "intervention_assessment"
+      ],
+      "key_concepts": {
+        "crime_places": true,
+        "environmental_cues": true,
+        "situational_precipitators": true,
+        "place_management": true
+      },
+      "application_contexts": [
+        "place_based_policing",
+        "environmental_design",
+        "crime_prevention",
+        "urban_planning"
+      ],
+      "related_theories": ["Crime Pattern Theory", "CPTED"],
+      "modern_relevance": "Foundation for place-based interventions"
+    },
+    {
+      "id": "image_of_city",
+      "name": "Image of the City",
+      "year": 1960,
+      "primary_authors": ["Kevin Lynch"],
+      "category": "Perception",
+      "principles": [
+        "Five elements: paths, edges, districts, nodes, landmarks",
+        "Legibility creates mental maps",
+        "Imageability enhances navigation",
+        "Visual form communicates meaning",
+        "Identity, structure, meaning in perception",
+        "Observer and environment interaction"
+      ],
+      "computational_requirements": [
+        "cognitive_mapping",
+        "landmark_detection",
+        "path_analysis",
+        "visibility_analysis",
+        "wayfinding_simulation"
+      ],
+      "key_concepts": {
+        "legibility": true,
+        "imageability": true,
+        "mental_maps": true,
+        "five_elements": true
+      },
+      "application_contexts": [
+        "urban_design",
+        "wayfinding_systems",
+        "tourism_planning",
+        "place_branding"
+      ],
+      "related_theories": ["Legibility Theory", "Pattern Language"],
+      "modern_relevance": "Foundation for urban wayfinding design"
+    },
+    {
+      "id": "pattern_language",
+      "name": "Pattern Language",
+      "year": 1977,
+      "primary_authors": ["Christopher Alexander"],
+      "category": "Perception",
+      "principles": [
+        "253 patterns for built environment",
+        "Patterns solve recurring problems",
+        "Hierarchical pattern relationships",
+        "Human-scale design solutions",
+        "Participatory design process",
+        "Timeless ways of building"
+      ],
+      "computational_requirements": [
+        "pattern_matching",
+        "generative_design",
+        "rule_based_modeling",
+        "parametric_design",
+        "pattern_optimization"
+      ],
+      "key_concepts": {
+        "pattern_hierarchy": true,
+        "problem_solution_pairs": true,
+        "generative_grammar": true,
+        "human_scale": true
+      },
+      "application_contexts": [
+        "architectural_design",
+        "urban_design",
+        "community_planning",
+        "design_guidelines"
+      ],
+      "related_theories": ["Image of the City", "Placemaking Theory"],
+      "modern_relevance": "Influences pattern-based and parametric design"
+    },
+    {
+      "id": "place_identity",
+      "name": "Place Identity Theory",
+      "year": 1978,
+      "primary_authors": ["Harold Proshansky"],
+      "category": "Perception",
+      "principles": [
+        "Physical environment shapes identity",
+        "Cognitive connection to places",
+        "Emotional bonds with settings",
+        "Place-based memories and meanings",
+        "Environmental self-regulation",
+        "Place attachment develops over time"
+      ],
+      "computational_requirements": [
+        "sentiment_analysis",
+        "behavioral_tracking",
+        "attachment_measurement",
+        "meaning_mapping",
+        "longitudinal_studies"
+      ],
+      "key_concepts": {
+        "place_attachment": true,
+        "environmental_cognition": true,
+        "place_dependence": true,
+        "identity_process": true
+      },
+      "application_contexts": [
+        "community_development",
+        "heritage_conservation",
+        "displacement_impacts",
+        "place_branding"
+      ],
+      "related_theories": ["Sense of Place", "Environmental Psychology"],
+      "modern_relevance": "Important for community engagement"
+    },
+    {
+      "id": "sense_of_place",
+      "name": "Sense of Place",
+      "year": 1976,
+      "primary_authors": ["Yi-Fu Tuan"],
+      "category": "Perception",
+      "principles": [
+        "Space becomes place through experience",
+        "Emotional connections to locations",
+        "Cultural meanings embedded in place",
+        "Time deepens place attachment",
+        "Pause allows place appreciation",
+        "Intimate experiences create place"
+      ],
+      "computational_requirements": [
+        "experience_mapping",
+        "cultural_analysis",
+        "temporal_analysis",
+        "narrative_extraction",
+        "place_meaning_analysis"
+      ],
+      "key_concepts": {
+        "topophilia": true,
+        "space_place_distinction": true,
+        "experiential_perspective": true,
+        "cultural_landscape": true
+      },
+      "application_contexts": [
+        "placemaking",
+        "cultural_planning",
+        "tourism_development",
+        "community_identity"
+      ],
+      "related_theories": ["Place Identity Theory", "Third Place Theory"],
+      "modern_relevance": "Foundation for placemaking practices"
+    },
+    {
+      "id": "prospect_refuge",
+      "name": "Prospect-Refuge Theory",
+      "year": 1975,
+      "primary_authors": ["Jay Appleton"],
+      "category": "Perception",
+      "principles": [
+        "Humans prefer spaces with views and shelter",
+        "Prospect allows seeing, refuge allows hiding",
+        "Evolutionary basis for spatial preferences",
+        "Balance creates comfortable spaces",
+        "Multiple prospects and refuges ideal",
+        "Natural and built environments apply"
+      ],
+      "computational_requirements": [
+        "viewshed_analysis",
+        "shelter_mapping",
+        "preference_modeling",
+        "spatial_comfort_metrics",
+        "evolutionary_algorithms"
+      ],
+      "key_concepts": {
+        "prospect": true,
+        "refuge": true,
+        "spatial_preference": true,
+        "evolutionary_aesthetics": true
+      },
+      "application_contexts": [
+        "landscape_design",
+        "public_space_design",
+        "residential_planning",
+        "park_design"
+      ],
+      "related_theories": ["Environmental Psychology", "CPTED"],
+      "modern_relevance": "Guides comfortable space design"
+    },
+    {
+      "id": "behavior_settings",
+      "name": "Behavior Settings Theory",
+      "year": 1968,
+      "primary_authors": ["Roger Barker"],
+      "category": "Perception",
+      "principles": [
+        "Physical settings shape behavior patterns",
+        "Standing patterns of behavior",
+        "Synomorphy between setting and behavior",
+        "Self-regulating systems",
+        "Behavior-milieu interface",
+        "Predictable behavior in settings"
+      ],
+      "computational_requirements": [
+        "behavior_pattern_analysis",
+        "setting_classification",
+        "activity_prediction",
+        "environmental_behavior_mapping",
+        "synomorphy_measurement"
+      ],
+      "key_concepts": {
+        "standing_patterns": true,
+        "synomorphy": true,
+        "behavior_milieu": true,
+        "setting_programs": true
+      },
+      "application_contexts": [
+        "facility_programming",
+        "activity_based_design",
+        "behavioral_prediction",
+        "space_planning"
+      ],
+      "related_theories": ["Environmental Psychology", "Pattern Language"],
+      "modern_relevance": "Informs activity-based design"
+    },
+    {
+      "id": "environmental_psychology",
+      "name": "Environmental Psychology",
+      "year": 1964,
+      "primary_authors": ["William Ittelson", "Harold Proshansky", "Leanne Rivlin", "Gary Winkel"],
+      "category": "Perception",
+      "principles": [
+        "Reciprocal person-environment relationship",
+        "Environmental perception and cognition",
+        "Personal space and territoriality",
+        "Environmental stress and coping",
+        "Place attachment and identity",
+        "Behavior-environment congruence"
+      ],
+      "computational_requirements": [
+        "perception_modeling",
+        "stress_analysis",
+        "personal_space_simulation",
+        "cognitive_mapping",
+        "behavior_prediction"
+      ],
+      "key_concepts": {
+        "person_environment_fit": true,
+        "environmental_cognition": true,
+        "territoriality": true,
+        "environmental_stress": true
+      },
+      "application_contexts": [
+        "workplace_design",
+        "healthcare_environments",
+        "educational_settings",
+        "residential_design"
+      ],
+      "related_theories": ["Place Identity Theory", "Behavior Settings Theory"],
+      "modern_relevance": "Foundation for evidence-based design"
+    },
+    {
+      "id": "legibility_theory",
+      "name": "Legibility Theory",
+      "year": 1960,
+      "primary_authors": ["Kevin Lynch"],
+      "category": "Perception",
+      "principles": [
+        "Clear urban form aids navigation",
+        "Distinctive elements create clarity",
+        "Visual coherence improves orientation",
+        "Memorable features anchor mental maps",
+        "Simplicity and clarity in design",
+        "Universal wayfinding principles"
+      ],
+      "computational_requirements": [
+        "legibility_metrics",
+        "navigation_modeling",
+        "visual_clarity_analysis",
+        "mental_map_prediction",
+        "wayfinding_optimization"
+      ],
+      "key_concepts": {
+        "visual_clarity": true,
+        "navigability": true,
+        "memorable_features": true,
+        "orientation_cues": true
+      },
+      "application_contexts": [
+        "signage_systems",
+        "urban_navigation",
+        "campus_planning",
+        "transit_systems"
+      ],
+      "related_theories": ["Image of the City", "Space Syntax Theory"],
+      "modern_relevance": "Essential for wayfinding design"
+    },
+    {
+      "id": "third_place",
+      "name": "Third Place Theory",
+      "year": 1989,
+      "primary_authors": ["Ray Oldenburg"],
+      "category": "Perception",
+      "principles": [
+        "Neutral ground beyond home and work",
+        "Leveling places reduce social barriers",
+        "Conversation as main activity",
+        "Accessibility and accommodation",
+        "Regular attendees create community",
+        "Low profile, playful mood"
+      ],
+      "computational_requirements": [
+        "social_interaction_modeling",
+        "accessibility_analysis",
+        "community_network_mapping",
+        "activity_pattern_analysis",
+        "social_capital_metrics"
+      ],
+      "key_concepts": {
+        "neutral_ground": true,
+        "social_leveling": true,
+        "regulars": true,
+        "informal_gathering": true
+      },
+      "application_contexts": [
+        "community_spaces",
+        "retail_planning",
+        "social_infrastructure",
+        "neighborhood_vitality"
+      ],
+      "related_theories": ["Sense of Place", "Organic City Theory"],
+      "modern_relevance": "Guides community space design"
+    },
+    {
+      "id": "placemaking",
+      "name": "Placemaking Theory",
+      "year": 1960,
+      "primary_authors": ["William H. Whyte"],
+      "category": "Perception",
+      "principles": [
+        "Community-driven place creation",
+        "Multi-use and flexible spaces",
+        "Human scale and comfort",
+        "Social activities attract people",
+        "Iterative improvement process",
+        "Local identity and character"
+      ],
+      "computational_requirements": [
+        "community_engagement_tools",
+        "activity_simulation",
+        "comfort_analysis",
+        "social_space_optimization",
+        "iterative_design_modeling"
+      ],
+      "key_concepts": {
+        "community_ownership": true,
+        "place_activation": true,
+        "human_scale": true,
+        "social_life": true
+      },
+      "application_contexts": [
+        "public_space_design",
+        "community_development",
+        "tactical_urbanism",
+        "place_activation"
+      ],
+      "related_theories": ["Sense of Place", "Third Place Theory"],
+      "modern_relevance": "Popular approach to public space improvement"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+*.pyc
+__pycache__/
+.DS_Store
+logs/
+*.log
+.env
+venv/
+env/
+.streamlit/
+*.csv
+*.xlsx
+.ipynb_checkpoints/
+.pytest_cache/
