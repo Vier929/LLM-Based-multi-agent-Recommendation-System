@@ -1,3 +1,5 @@
+
+
 """
 Streamlit Demo for Theory-Driven Multi-Agent Recommendation System
 Interactive interface for urban AI recommendations
@@ -14,49 +16,66 @@ import json
 import os
 import sys
 import numpy as np
-import importlib.util
 
-# Import the recommendation system components with special handling for + in filename
+# Import the recommendation system components
+# Assuming the file is renamed to recommendation_system.py or imported as a package
 try:
-    # Path to the recommendation+system.py file
-    module_path = r"C:\Users\luvyf\Desktop\recommendation+system.py"
-
-    # Check if file exists
-    if not os.path.exists(module_path):
-        st.error(f"⚠️ File not found: {module_path}")
-        st.error("Please ensure recommendation+system.py exists at C:\\Users\\luvyf\\Desktop\\")
+    # Option 1: If the file is renamed to recommendation_system.py
+    from recommendation_system import (
+        UrbanAIRecommendationSystem,
+        UrbanScenario,
+        UrbanTheory,
+        Algorithm,
+        DataSource,
+        Recommendation,
+        display_recommendation
+    )
+    
+except ImportError as e:
+    try:
+        # Option 2: If keeping original filename, use importlib with proper error handling
+        import importlib.util
+        
+        # Look for the file in current directory first, then in common paths
+        possible_paths = [
+            "recommendation_system.py",  # Current directory
+            "./recommendation+system.py",
+            os.path.join(os.getcwd(), "recommendation+system.py"),
+        ]
+        
+        module_path = None
+        for path in possible_paths:
+            if os.path.exists(path):
+                module_path = path
+                break
+        
+        if module_path is None:
+            raise FileNotFoundError("recommendation_system.py not found in expected locations")
+        
+        # Load the module
+        spec = importlib.util.spec_from_file_location("recommendation_system", module_path)
+        if spec is None or spec.loader is None:
+            raise ImportError("Failed to create module specification")
+        
+        recommendation_system = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(recommendation_system)
+        
+        # Import required classes
+        UrbanAIRecommendationSystem = recommendation_system.UrbanAIRecommendationSystem
+        UrbanScenario = recommendation_system.UrbanScenario
+        UrbanTheory = recommendation_system.UrbanTheory
+        Algorithm = recommendation_system.Algorithm
+        DataSource = recommendation_system.DataSource
+        Recommendation = recommendation_system.Recommendation
+        display_recommendation = recommendation_system.display_recommendation
+        
+    except Exception as import_error:
+        st.error(f"⚠️ Could not import the recommendation system.")
+        st.error(f"Error: {str(import_error)}")
+        st.error(f"Please ensure 'recommendation+system.py' or 'recommendation_system.py' is in the same directory as this app.")
+        st.error(f"Current working directory: {os.getcwd()}")
+        st.error(f"Files in current directory: {os.listdir('.')}")
         st.stop()
-
-    # Use importlib to import file with special characters
-    spec = importlib.util.spec_from_file_location("recommendation_system", module_path)
-    if spec is None:
-        st.error("⚠️ Failed to load module specification")
-        st.stop()
-
-    recommendation_system = importlib.util.module_from_spec(spec)
-    if spec.loader is None:
-        st.error("⚠️ Module loader is None")
-        st.stop()
-
-    spec.loader.exec_module(recommendation_system)
-
-    # Import required classes from the module
-    UrbanAIRecommendationSystem = recommendation_system.UrbanAIRecommendationSystem
-    UrbanScenario = recommendation_system.UrbanScenario
-    UrbanTheory = recommendation_system.UrbanTheory
-    Algorithm = recommendation_system.Algorithm
-    DataSource = recommendation_system.DataSource
-    Recommendation = recommendation_system.Recommendation
-    display_recommendation = recommendation_system.display_recommendation
-
-except Exception as e:
-    st.error(f"⚠️ Could not import the recommendation system. Error: {str(e)}")
-    st.error(f"Error type: {type(e).__name__}")
-    st.error(f"Current working directory: {os.getcwd()}")
-    import traceback
-
-    st.error(f"Traceback: {traceback.format_exc()}")
-    st.stop()
 
 # Page configuration
 st.set_page_config(
@@ -368,7 +387,8 @@ def main():
         """)
 
         st.header("🔧 Configuration")
-        data_path = st.text_input("Data Directory", value=r"C:\Users\luvyf\Desktop")
+        # Remove hardcoded path, use current directory as default
+        data_path = st.text_input("Data Directory", value=os.getcwd())
 
         if st.button("🚀 Initialize System"):
             if initialize_system():
@@ -474,6 +494,19 @@ def main():
     # Main content area
     if st.session_state.system is None:
         st.warning("⚠️ Please initialize the system using the sidebar button.")
+        
+        # Add file check information
+        st.info("""
+        📁 **File Requirements:**
+        
+        Make sure the following file is in the same directory as this app:
+        - `recommendation+system.py` or `recommendation_system.py`
+        
+        Current directory: `{}`
+        
+        Available files: {}
+        """.format(os.getcwd(), ", ".join([f for f in os.listdir('.') if f.endswith('.py')])))
+        
         return
 
     # Input section
