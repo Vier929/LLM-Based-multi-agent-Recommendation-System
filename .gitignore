@@ -11,3 +11,6 @@ env/
 *.xlsx
 .ipynb_checkpoints/
 .pytest_cache/
+data/*.json
+data/green-index-*.json
+data/ee-suzhou-*.json
