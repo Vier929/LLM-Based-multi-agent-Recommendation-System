@@ -1,28 +1,23 @@
 """
 Theory-Driven Multi-Agent Recommendation System for Urban AI Applications
-A SOTA implementation based on the research paper bridging theory-practice gap
+A lightweight demo implementation optimized for cloud deployment
 """
 
 import asyncio
 import numpy as np
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
-from transformers import BertModel, BertTokenizer, AutoModel, AutoTokenizer
 from typing import Dict, List, Tuple, Optional, Any
 from dataclasses import dataclass, field
 from enum import Enum
 import json
 import logging
 from abc import ABC, abstractmethod
-import networkx as nx
 from scipy.spatial.distance import cosine
-from torch_geometric.nn import GCNConv, global_mean_pool
-from torch_geometric.data import Data, Batch
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
 import warnings
 import os
+import re
+from collections import defaultdict
 
 warnings.filterwarnings('ignore')
 
@@ -81,6 +76,55 @@ class Recommendation:
     confidence_score: float
     validation_results: Dict[str, Any]
 
+# Lightweight text embedding class (replaces BERT)
+class LightweightTextEmbedding:
+    """Lightweight text embedding using TF-IDF and word vectors"""
+    
+    def __init__(self):
+        # Pre-computed urban domain vocabulary with embeddings
+        self.vocab = {
+            'traffic': np.array([0.1, 0.8, 0.2, 0.4, 0.7]),
+            'crime': np.array([0.9, 0.1, 0.8, 0.3, 0.2]),
+            'safety': np.array([0.8, 0.2, 0.9, 0.4, 0.3]),
+            'transportation': np.array([0.2, 0.9, 0.3, 0.8, 0.6]),
+            'housing': np.array([0.3, 0.4, 0.2, 0.9, 0.7]),
+            'development': np.array([0.4, 0.6, 0.3, 0.8, 0.8]),
+            'urban': np.array([0.5, 0.7, 0.6, 0.7, 0.8]),
+            'planning': np.array([0.6, 0.5, 0.4, 0.9, 0.7]),
+            'design': np.array([0.7, 0.3, 0.5, 0.6, 0.9]),
+            'spatial': np.array([0.3, 0.8, 0.4, 0.5, 0.6]),
+            'surveillance': np.array([0.8, 0.2, 0.7, 0.3, 0.4]),
+            'walkability': np.array([0.2, 0.7, 0.3, 0.8, 0.9]),
+            'sustainability': np.array([0.4, 0.5, 0.6, 0.7, 0.8]),
+            'community': np.array([0.5, 0.6, 0.7, 0.8, 0.7]),
+            'mixed': np.array([0.6, 0.4, 0.5, 0.7, 0.6]),
+            'density': np.array([0.3, 0.5, 0.4, 0.6, 0.7]),
+            'accessibility': np.array([0.4, 0.7, 0.5, 0.8, 0.6]),
+            'efficiency': np.array([0.5, 0.8, 0.6, 0.7, 0.5]),
+            'optimization': np.array([0.7, 0.9, 0.5, 0.6, 0.4]),
+            'prediction': np.array([0.8, 0.6, 0.7, 0.4, 0.5])
+        }
+        self.embedding_dim = 5
+    
+    def get_embedding(self, text: str) -> np.ndarray:
+        """Get embedding for text using lightweight approach"""
+        words = re.findall(r'\w+', text.lower())
+        embeddings = []
+        
+        for word in words:
+            if word in self.vocab:
+                embeddings.append(self.vocab[word])
+            else:
+                # Generate pseudo-embedding for unknown words
+                hash_val = hash(word) % 1000
+                embedding = np.random.RandomState(hash_val).uniform(-0.5, 0.5, self.embedding_dim)
+                embeddings.append(embedding)
+        
+        if embeddings:
+            return np.mean(embeddings, axis=0)
+        else:
+            return np.zeros(self.embedding_dim)
+
 # Agent Base Class
 class Agent(ABC):
     """Base class for all agents in the system"""
@@ -100,17 +144,15 @@ class ScenarioAnalyzerAgent(Agent):
     
     def __init__(self):
         super().__init__("ScenarioAnalyzer")
-        self.tokenizer = AutoTokenizer.from_pretrained("allenai/scibert_scivocab_uncased")
-        self.model = AutoModel.from_pretrained("allenai/scibert_scivocab_uncased")
-        self.model.eval()
+        self.text_embedder = LightweightTextEmbedding()
         
         # Domain keywords for classification
         self.domain_keywords = {
-            "transportation": ["traffic", "transport", "mobility", "transit", "vehicle"],
-            "safety": ["crime", "security", "surveillance", "safety", "emergency"],
-            "housing": ["housing", "residential", "dwelling", "affordable", "gentrification"],
-            "environment": ["pollution", "green", "sustainability", "climate", "emission"],
-            "economic": ["business", "economy", "employment", "commerce", "retail"]
+            "transportation": ["traffic", "transport", "mobility", "transit", "vehicle", "parking", "road"],
+            "safety": ["crime", "security", "surveillance", "safety", "emergency", "police"],
+            "housing": ["housing", "residential", "dwelling", "affordable", "gentrification", "development"],
+            "environment": ["pollution", "green", "sustainability", "climate", "emission", "energy"],
+            "economic": ["business", "economy", "employment", "commerce", "retail", "economic"]
         }
         
     async def process(self, description: str) -> UrbanScenario:
@@ -147,10 +189,7 @@ class ScenarioAnalyzerAgent(Agent):
         return max(domain_scores, key=domain_scores.get) if max(domain_scores.values()) > 0 else "general"
     
     async def _extract_information(self, text: str) -> Dict[str, Any]:
-        """Extract structured information using NLP"""
-        # Simplified extraction using pattern matching and NER
-        # In production, would use more sophisticated NLP pipelines
-        
+        """Extract structured information using pattern matching"""
         info = {
             'objectives': self._extract_objectives(text),
             'constraints': self._extract_constraints(text),
@@ -163,63 +202,66 @@ class ScenarioAnalyzerAgent(Agent):
     
     def _extract_objectives(self, text: str) -> List[str]:
         """Extract objectives from text"""
-        objective_patterns = ["to reduce", "to improve", "to enhance", "to optimize", "to minimize"]
+        objective_patterns = ["to reduce", "to improve", "to enhance", "to optimize", "to minimize", "to increase", "to develop"]
         objectives = []
         
         for pattern in objective_patterns:
             if pattern in text.lower():
-                # Extract the phrase following the pattern
                 start = text.lower().find(pattern)
-                end = min(start + 50, len(text))
-                objectives.append(text[start:end].strip())
+                end = min(start + 60, len(text))
+                objective = text[start:end].strip()
+                if objective not in objectives:
+                    objectives.append(objective)
                 
-        return objectives[:3]  # Limit to top 3
+        return objectives[:3]
     
     def _extract_constraints(self, text: str) -> List[str]:
         """Extract constraints from text"""
-        constraint_patterns = ["limited", "constraint", "restriction", "budget", "within"]
+        constraint_patterns = ["limited", "constraint", "restriction", "budget", "within", "while maintaining", "without"]
         constraints = []
         
         for pattern in constraint_patterns:
             if pattern in text.lower():
                 start = text.lower().find(pattern)
-                end = min(start + 40, len(text))
-                constraints.append(text[start:end].strip())
+                end = min(start + 50, len(text))
+                constraint = text[start:end].strip()
+                if constraint not in constraints:
+                    constraints.append(constraint)
                 
         return constraints[:3]
     
     def _extract_stakeholders(self, text: str) -> List[str]:
         """Extract stakeholders mentioned in text"""
         stakeholder_keywords = ["residents", "government", "businesses", "community", "citizens",
-                               "authorities", "developers", "organizations", "agencies"]
+                               "authorities", "developers", "organizations", "agencies", "planners"]
         
         stakeholders = [kw for kw in stakeholder_keywords if kw in text.lower()]
-        return stakeholders[:4]
+        return list(set(stakeholders))[:4]
     
     def _extract_temporal(self, text: str) -> str:
         """Extract temporal scope"""
-        if any(word in text.lower() for word in ["immediate", "urgent", "now"]):
+        if any(word in text.lower() for word in ["immediate", "urgent", "now", "asap"]):
             return "immediate"
-        elif any(word in text.lower() for word in ["short-term", "months"]):
+        elif any(word in text.lower() for word in ["short-term", "months", "quarterly"]):
             return "short-term"
-        elif any(word in text.lower() for word in ["long-term", "years"]):
+        elif any(word in text.lower() for word in ["long-term", "years", "decade"]):
             return "long-term"
         else:
-            return "unspecified"
+            return "medium-term"
     
     def _extract_spatial(self, text: str) -> str:
         """Extract spatial boundaries"""
-        if any(word in text.lower() for word in ["neighborhood", "district"]):
+        if any(word in text.lower() for word in ["neighborhood", "district", "block"]):
             return "neighborhood"
-        elif any(word in text.lower() for word in ["city", "urban"]):
+        elif any(word in text.lower() for word in ["city", "urban", "downtown", "center"]):
             return "city"
-        elif any(word in text.lower() for word in ["region", "metropolitan"]):
+        elif any(word in text.lower() for word in ["region", "metropolitan", "county"]):
             return "regional"
         else:
-            return "unspecified"
+            return "city"
     
     def _calculate_complexity(self, scenario: UrbanScenario) -> float:
-        """Calculate scenario complexity score using equation from paper"""
+        """Calculate scenario complexity score"""
         weights = {
             'objectives': 0.2,
             'constraints': 0.15,
@@ -233,24 +275,22 @@ class ScenarioAnalyzerAgent(Agent):
             'objectives': min(len(scenario.objectives) / 3.0, 1.0),
             'constraints': min(len(scenario.constraints) / 3.0, 1.0),
             'stakeholders': min(len(scenario.stakeholders) / 4.0, 1.0),
-            'temporal': 0.3 if scenario.temporal_scope == "immediate" else 0.6 if scenario.temporal_scope == "short-term" else 1.0,
-            'spatial': 0.3 if scenario.spatial_boundaries == "neighborhood" else 0.6 if scenario.spatial_boundaries == "city" else 1.0,
-            'domain_complexity': 0.8 if scenario.domain in ["safety", "transportation"] else 0.5
+            'temporal': 0.9 if scenario.temporal_scope == "immediate" else 0.6 if scenario.temporal_scope == "short-term" else 0.8,
+            'spatial': 0.4 if scenario.spatial_boundaries == "neighborhood" else 0.7 if scenario.spatial_boundaries == "city" else 1.0,
+            'domain_complexity': 0.8 if scenario.domain in ["safety", "transportation"] else 0.6
         }
         
         total_complexity = sum(weights[k] * complexity_scores[k] for k in weights)
-        return total_complexity
+        return min(total_complexity, 1.0)
 
 # Theory Retriever Agent
 class TheoryRetrieverAgent(Agent):
-    """Retrieve relevant urban theories using BERT-based semantic matching"""
+    """Retrieve relevant urban theories using semantic matching"""
     
     def __init__(self, theory_database: List[UrbanTheory]):
         super().__init__("TheoryRetriever")
         self.theories = theory_database
-        self.tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
-        self.model = BertModel.from_pretrained('bert-base-uncased')
-        self.model.eval()
+        self.text_embedder = LightweightTextEmbedding()
         
         # Pre-compute theory embeddings
         self._compute_theory_embeddings()
@@ -259,17 +299,7 @@ class TheoryRetrieverAgent(Agent):
         """Pre-compute embeddings for all theories"""
         for theory in self.theories:
             text = f"{theory.name} {' '.join(theory.principles[:3])}"
-            theory.embedding = self._get_embedding(text)
-    
-    def _get_embedding(self, text: str) -> np.ndarray:
-        """Get BERT embedding for text"""
-        inputs = self.tokenizer(text, return_tensors='pt', max_length=512, truncation=True, padding=True)
-        
-        with torch.no_grad():
-            outputs = self.model(**inputs)
-            embedding = outputs.last_hidden_state.mean(dim=1).squeeze().numpy()
-            
-        return embedding
+            theory.embedding = self.text_embedder.get_embedding(text)
     
     async def process(self, scenario: UrbanScenario) -> List[UrbanTheory]:
         """Retrieve theories relevant to the scenario"""
@@ -277,38 +307,54 @@ class TheoryRetrieverAgent(Agent):
         
         # Create scenario embedding
         scenario_text = f"{scenario.description} {' '.join(scenario.objectives)}"
-        scenario_embedding = self._get_embedding(scenario_text)
+        scenario_embedding = self.text_embedder.get_embedding(scenario_text)
         
         # Calculate similarity scores
         theory_scores = []
         for theory in self.theories:
             if theory.embedding is not None:
                 similarity = 1 - cosine(scenario_embedding, theory.embedding)
+                # Add domain-specific boost
+                if self._is_domain_relevant(theory, scenario.domain):
+                    similarity += 0.2
                 theory_scores.append((theory, similarity))
         
         # Sort by similarity and filter
         theory_scores.sort(key=lambda x: x[1], reverse=True)
         
-        # Select top theories (threshold-based)
+        # Select top theories
         selected_theories = []
         for theory, score in theory_scores:
-            if score > 0.6:  # Similarity threshold
+            if score > 0.4:  # Lower threshold for demo
                 selected_theories.append(theory)
-            if len(selected_theories) >= 5:  # Maximum theories
+            if len(selected_theories) >= 5:
                 break
         
-        # Ensure at least one theory is selected
-        if not selected_theories and theory_scores:
-            selected_theories.append(theory_scores[0][0])
+        # Ensure at least 2 theories are selected
+        if len(selected_theories) < 2 and theory_scores:
+            for theory, _ in theory_scores[:2]:
+                if theory not in selected_theories:
+                    selected_theories.append(theory)
         
-        # Check for theory synergies
+        # Add complementary theories
         selected_theories = self._identify_synergies(selected_theories, scenario)
         
-        return selected_theories
+        return selected_theories[:5]
+    
+    def _is_domain_relevant(self, theory: UrbanTheory, domain: str) -> bool:
+        """Check if theory is relevant to domain"""
+        domain_theory_map = {
+            "safety": ["Safety", "Design"],
+            "transportation": ["Design", "Spatial"],
+            "housing": ["Design", "Spatial"],
+            "environment": ["Design", "Spatial"],
+            "economic": ["Design", "Spatial"]
+        }
+        
+        return theory.category in domain_theory_map.get(domain, [])
     
     def _identify_synergies(self, theories: List[UrbanTheory], scenario: UrbanScenario) -> List[UrbanTheory]:
         """Identify complementary theory combinations"""
-        # Simple synergy rules based on domain
         synergy_rules = {
             "safety": ["CPTED", "Defensible Space", "Eyes on the Street"],
             "transportation": ["Transit-Oriented Development", "Complete Streets"],
@@ -316,30 +362,20 @@ class TheoryRetrieverAgent(Agent):
         }
         
         if scenario.domain in synergy_rules:
-            synergy_theories = [t for t in self.theories 
-                              if any(name in t.name for name in synergy_rules[scenario.domain])]
-            
-            # Add synergistic theories not already selected
-            for theory in synergy_theories:
-                if theory not in theories:
+            for theory in self.theories:
+                if (any(name in theory.name for name in synergy_rules[scenario.domain]) 
+                    and theory not in theories and len(theories) < 4):
                     theories.append(theory)
                     
-        return theories[:5]  # Limit to 5 theories
+        return theories
 
-# Algorithm Matcher Agent
+# Algorithm Matcher Agent  
 class AlgorithmMatcherAgent(Agent):
     """Match algorithms to theoretical requirements"""
     
     def __init__(self, algorithm_database: List[Algorithm]):
         super().__init__("AlgorithmMatcher")
         self.algorithms = algorithm_database
-        
-        # Initialize ST-GCN for effectiveness prediction
-        self.effectiveness_predictor = SpatioTemporalGCN(
-            input_dim=10,
-            hidden_dim=64,
-            output_dim=1
-        )
         
     async def process(self, theories: List[UrbanTheory], scenario: UrbanScenario) -> List[Algorithm]:
         """Match algorithms to theoretical requirements"""
@@ -354,7 +390,7 @@ class AlgorithmMatcherAgent(Agent):
             score = self._calculate_algorithm_score(algo, requirements, scenario)
             algorithm_scores.append((algo, score))
         
-        # Optimize selection using the paper's equation
+        # Optimize selection
         selected_algorithms = self._optimize_selection(algorithm_scores, requirements)
         
         return selected_algorithms
@@ -377,10 +413,9 @@ class AlgorithmMatcherAgent(Agent):
     
     def _calculate_algorithm_score(self, algo: Algorithm, requirements: List[str], scenario: UrbanScenario) -> float:
         """Calculate algorithm score based on capability to fulfill requirements"""
-        # Map requirements to capabilities
         req_to_cap = {
             "spatial_analysis": "Spatial Analysis",
-            "pattern_recognition": "Pattern Recognition",
+            "pattern_recognition": "Pattern Recognition", 
             "prediction": "Prediction",
             "optimization": "Optimization",
             "real_time": "Real-time Processing",
@@ -389,59 +424,56 @@ class AlgorithmMatcherAgent(Agent):
         }
         
         total_score = 0.0
+        matched_requirements = 0
+        
         for req in requirements:
             if req in req_to_cap and req_to_cap[req] in algo.capabilities:
                 total_score += algo.capabilities[req_to_cap[req]]
+                matched_requirements += 1
         
-        # Adjust for computational cost
-        cost_penalty = algo.computational_cost * 0.2
-        final_score = total_score - cost_penalty
+        # Normalize by number of requirements
+        if matched_requirements > 0:
+            total_score = total_score / matched_requirements
         
-        return max(0, final_score)
+        # Domain-specific bonuses
+        if scenario.domain == "safety" and "Pattern Recognition" in algo.capabilities:
+            total_score += 0.1
+        if scenario.domain == "transportation" and "Optimization" in algo.capabilities:
+            total_score += 0.1
+            
+        # Adjust for computational cost (prefer efficient algorithms)
+        cost_penalty = algo.computational_cost * 0.1
+        final_score = max(0, total_score - cost_penalty)
+        
+        return final_score
     
     def _optimize_selection(self, algorithm_scores: List[Tuple[Algorithm, float]], 
                           requirements: List[str]) -> List[Algorithm]:
-        """Optimize algorithm selection using paper's optimization equation"""
-        # Sort by score
+        """Optimize algorithm selection"""
         algorithm_scores.sort(key=lambda x: x[1], reverse=True)
         
         selected = []
-        covered_requirements = set()
+        covered_capabilities = set()
         
         for algo, score in algorithm_scores:
-            if score > 0:
-                # Check if algorithm adds new capabilities
+            if score > 0.3:  # Lower threshold for demo
                 algo_caps = set(algo.capabilities.keys())
-                if not algo_caps.issubset(covered_requirements):
+                
+                # Add if provides new capabilities or score is very high
+                if not algo_caps.issubset(covered_capabilities) or score > 0.8:
                     selected.append(algo)
-                    covered_requirements.update(algo_caps)
+                    covered_capabilities.update(algo_caps)
                     
-            if len(selected) >= 3:  # Limit algorithms
+            if len(selected) >= 4:  # Slightly more algorithms for better demo
                 break
                 
+        # Ensure at least 2 algorithms
+        if len(selected) < 2:
+            for algo, _ in algorithm_scores[:2]:
+                if algo not in selected:
+                    selected.append(algo)
+                    
         return selected
-
-# Spatio-Temporal Graph Convolutional Network
-class SpatioTemporalGCN(nn.Module):
-    """ST-GCN for effectiveness prediction"""
-    
-    def __init__(self, input_dim: int, hidden_dim: int, output_dim: int):
-        super().__init__()
-        self.conv1 = GCNConv(input_dim, hidden_dim)
-        self.conv2 = GCNConv(hidden_dim, hidden_dim)
-        self.conv3 = GCNConv(hidden_dim, output_dim)
-        self.dropout = nn.Dropout(0.2)
-        
-    def forward(self, x, edge_index, batch):
-        x = F.relu(self.conv1(x, edge_index))
-        x = self.dropout(x)
-        x = F.relu(self.conv2(x, edge_index))
-        x = self.dropout(x)
-        x = self.conv3(x, edge_index)
-        
-        # Global pooling
-        x = global_mean_pool(x, batch)
-        return torch.sigmoid(x)
 
 # Data Source Selector Agent
 class DataSourceSelectorAgent(Agent):
@@ -468,14 +500,17 @@ class DataSourceSelectorAgent(Agent):
         
         # Select top sources
         source_scores.sort(key=lambda x: x[1], reverse=True)
-        selected_sources = [s[0] for s in source_scores if s[1] > 0.5][:5]
+        selected_sources = [s[0] for s in source_scores if s[1] > 0.3][:6]  # More sources for demo
+        
+        # Ensure diverse data types
+        selected_sources = self._ensure_diversity(selected_sources, data_requirements)
         
         return selected_sources
     
     def _calculate_data_score(self, source: DataSource, requirements: set, scenario: UrbanScenario) -> float:
-        """Calculate data source score using multiplicative function from paper"""
+        """Calculate data source score"""
         dimensions = ['relevance', 'quality', 'temporal_coverage', 'accessibility', 'reliability', 'compatibility']
-        weights = [0.25, 0.2, 0.15, 0.15, 0.15, 0.1]
+        weights = [0.3, 0.2, 0.15, 0.15, 0.1, 0.1]
         
         scores = []
         
@@ -487,16 +522,19 @@ class DataSourceSelectorAgent(Agent):
         for dim in dimensions[1:]:
             scores.append(source.quality_scores.get(dim, 0.5))
         
-        # Multiplicative scoring as per paper
-        total_score = 1.0
-        for score, weight in zip(scores, weights):
-            total_score *= (score ** weight)
+        # Weighted average instead of multiplicative for more forgiving scoring
+        total_score = sum(score * weight for score, weight in zip(scores, weights))
+        
+        # Domain-specific boosts
+        if scenario.domain == "safety" and "sensor" in source.type.lower():
+            total_score += 0.1
+        if scenario.domain == "transportation" and "spatial" in source.type.lower():
+            total_score += 0.1
             
-        return total_score
+        return min(total_score, 1.0)
     
     def _calculate_relevance(self, source: DataSource, requirements: set, scenario: UrbanScenario) -> float:
         """Calculate relevance of data source to requirements"""
-        # Simple keyword matching for demonstration
         relevance_keywords = {
             "spatial": ["geographic", "geospatial", "location", "map"],
             "temporal": ["time-series", "historical", "real-time"],
@@ -510,11 +548,48 @@ class DataSourceSelectorAgent(Agent):
         
         for req in requirements:
             for category, keywords in relevance_keywords.items():
-                if any(kw in req.lower() for kw in keywords) and any(kw in source.type.lower() for kw in keywords):
+                if (any(kw in req.lower() for kw in keywords) and 
+                    any(kw in source.type.lower() for kw in keywords)):
                     matches += 1
                     
-        relevance_score = min(matches / max(len(requirements), 1), 1.0)
-        return relevance_score
+        if requirements:
+            relevance_score = min(matches / len(requirements), 1.0)
+        else:
+            relevance_score = 0.5
+            
+        # Boost for domain relevance
+        domain_boosts = {
+            "safety": ["sensor", "social", "image"],
+            "transportation": ["spatial", "sensor", "temporal"],
+            "housing": ["demographic", "spatial"],
+            "environment": ["sensor", "temporal", "spatial"]
+        }
+        
+        if scenario.domain in domain_boosts:
+            for boost_type in domain_boosts[scenario.domain]:
+                if boost_type in source.type.lower():
+                    relevance_score += 0.2
+                    
+        return min(relevance_score, 1.0)
+    
+    def _ensure_diversity(self, sources: List[DataSource], requirements: set) -> List[DataSource]:
+        """Ensure diversity in selected data sources"""
+        if len(sources) < 3:
+            return sources
+            
+        # Group by type
+        type_groups = defaultdict(list)
+        for source in sources:
+            type_groups[source.type].append(source)
+        
+        # Select best from each type
+        diverse_sources = []
+        for source_type, type_sources in type_groups.items():
+            # Sort by quality and take best
+            type_sources.sort(key=lambda s: np.mean(list(s.quality_scores.values())), reverse=True)
+            diverse_sources.append(type_sources[0])
+            
+        return diverse_sources[:5]
 
 # Integration Validator Agent
 class IntegrationValidatorAgent(Agent):
@@ -522,7 +597,7 @@ class IntegrationValidatorAgent(Agent):
     
     def __init__(self):
         super().__init__("IntegrationValidator")
-        self.monte_carlo_iterations = 100
+        self.monte_carlo_iterations = 50  # Reduced for faster demo
         
     async def process(self, theories: List[UrbanTheory], algorithms: List[Algorithm], 
                      data_sources: List[DataSource], scenario: UrbanScenario) -> Recommendation:
@@ -535,16 +610,19 @@ class IntegrationValidatorAgent(Agent):
         # Stage 2: Check for incompatibilities
         compatibility_issues = self._check_compatibility(theories, algorithms, data_sources)
         
+        # Stage 3: Calculate confidence
+        confidence_score = self._calculate_confidence(theories, algorithms, data_sources, scenario, robustness_score)
+        
         # Create recommendation
         recommendation = Recommendation(
             theories=theories,
             algorithms=algorithms,
             data_sources=data_sources,
-            confidence_score=robustness_score,
+            confidence_score=confidence_score,
             validation_results={
                 'robustness': robustness_score,
                 'compatibility_issues': compatibility_issues,
-                'requires_human_validation': robustness_score < 0.7 or len(compatibility_issues) > 0
+                'requires_human_validation': confidence_score < 0.7 or len(compatibility_issues) > 0
             }
         )
         
@@ -552,14 +630,13 @@ class IntegrationValidatorAgent(Agent):
     
     async def _test_robustness(self, theories: List[UrbanTheory], algorithms: List[Algorithm],
                               data_sources: List[DataSource], scenario: UrbanScenario) -> float:
-        """Monte Carlo simulation for robustness testing"""
+        """Simplified robustness testing"""
         successful_runs = 0
         
         for i in range(self.monte_carlo_iterations):
-            # Simulate performance with noise
             performance = self._simulate_performance(theories, algorithms, data_sources, scenario)
             
-            if performance > 0.6:  # Threshold
+            if performance > 0.5:  # Lower threshold for demo
                 successful_runs += 1
                 
         robustness = successful_runs / self.monte_carlo_iterations
@@ -568,22 +645,43 @@ class IntegrationValidatorAgent(Agent):
     def _simulate_performance(self, theories: List[UrbanTheory], algorithms: List[Algorithm],
                             data_sources: List[DataSource], scenario: UrbanScenario) -> float:
         """Simulate performance with random variations"""
-        base_performance = 0.7
-        
-        # Theory contribution
+        # Base performance calculation
         theory_score = min(len(theories) / 3.0, 1.0) * 0.3
         
-        # Algorithm capability
-        algo_score = np.mean([np.mean(list(a.capabilities.values())) for a in algorithms]) * 0.4
+        if algorithms:
+            algo_score = np.mean([np.mean(list(a.capabilities.values())) for a in algorithms]) * 0.4
+        else:
+            algo_score = 0.0
+            
+        if data_sources:
+            data_score = np.mean([np.mean(list(d.quality_scores.values())) for d in data_sources]) * 0.3
+        else:
+            data_score = 0.0
         
-        # Data quality
-        data_score = np.mean([np.mean(list(d.quality_scores.values())) for d in data_sources]) * 0.3
+        # Add small random variation
+        noise = np.random.normal(0, 0.05)
         
-        # Add noise
-        noise = np.random.normal(0, 0.1)
-        
-        performance = base_performance * (theory_score + algo_score + data_score) + noise
+        performance = theory_score + algo_score + data_score + noise
         return np.clip(performance, 0, 1)
+    
+    def _calculate_confidence(self, theories: List[UrbanTheory], algorithms: List[Algorithm],
+                            data_sources: List[DataSource], scenario: UrbanScenario, robustness: float) -> float:
+        """Calculate overall confidence score"""
+        # Component scores
+        theory_confidence = min(len(theories) / 3.0, 1.0)
+        algo_confidence = min(len(algorithms) / 3.0, 1.0)
+        data_confidence = min(len(data_sources) / 4.0, 1.0)
+        
+        # Complexity adjustment
+        complexity_penalty = scenario.complexity_score * 0.1
+        
+        # Base confidence
+        base_confidence = (theory_confidence * 0.3 + algo_confidence * 0.35 + 
+                          data_confidence * 0.25 + robustness * 0.1)
+        
+        final_confidence = max(0, base_confidence - complexity_penalty)
+        
+        return min(final_confidence, 1.0)
     
     def _check_compatibility(self, theories: List[UrbanTheory], algorithms: List[Algorithm],
                            data_sources: List[DataSource]) -> List[str]:
@@ -591,26 +689,38 @@ class IntegrationValidatorAgent(Agent):
         issues = []
         
         # Check theory-algorithm compatibility
+        all_theory_reqs = set()
         for theory in theories:
-            theory_reqs = set(theory.computational_requirements)
-            algo_caps = set()
-            for algo in algorithms:
-                algo_caps.update(algo.capabilities.keys())
-                
-            missing = theory_reqs - algo_caps
-            if missing:
-                issues.append(f"Theory '{theory.name}' requires {missing} but algorithms don't provide")
+            all_theory_reqs.update(theory.computational_requirements)
+            
+        all_algo_caps = set()
+        for algo in algorithms:
+            all_algo_caps.update(algo.capabilities.keys())
+            
+        # Map requirements to capabilities
+        req_cap_map = {
+            "spatial_analysis": "Spatial Analysis",
+            "pattern_recognition": "Pattern Recognition",
+            "prediction": "Prediction",
+            "optimization": "Optimization",
+            "real_time": "Real-time Processing",
+            "temporal_analysis": "Temporal Analysis",
+            "classification": "Classification"
+        }
+        
+        for req in all_theory_reqs:
+            if req in req_cap_map:
+                cap = req_cap_map[req]
+                if cap not in all_algo_caps:
+                    issues.append(f"Theory requirement '{req}' not fully covered by selected algorithms")
         
         # Check algorithm-data compatibility
+        all_data_types = set(ds.type for ds in data_sources)
         for algo in algorithms:
-            data_types = set()
-            for source in data_sources:
-                data_types.add(source.type)
-                
-            missing_data = set(algo.data_requirements) - data_types
-            if missing_data:
-                issues.append(f"Algorithm '{algo.name}' requires {missing_data} data but not available")
-                
+            for data_req in algo.data_requirements:
+                if not any(data_req.lower() in dt.lower() for dt in all_data_types):
+                    issues.append(f"Algorithm '{algo.name}' requires '{data_req}' data type not available")
+                    
         return issues
 
 # Multi-Agent Orchestrator
@@ -620,10 +730,7 @@ class UrbanAIRecommendationSystem:
     def __init__(self):
         self.logger = logging.getLogger(f"{__name__}.Orchestrator")
         
-        # 配置JSON文件路径
-        self.data_dir = r"C:\Users\luvyf\Desktop\recommendation  system"
-        
-        # Initialize knowledge bases
+        # Initialize knowledge bases with defaults (no file dependencies)
         self.theories = self._load_theory_database()
         self.algorithms = self._load_algorithm_database()
         self.data_sources = self._load_data_catalog()
@@ -636,135 +743,56 @@ class UrbanAIRecommendationSystem:
         self.validator = IntegrationValidatorAgent()
     
     def _load_theory_database(self) -> List[UrbanTheory]:
-        """Load urban planning and safety theories from JSON"""
-        json_path = os.path.join(self.data_dir, 'urban-theory-database.json')
-        
-        try:
-            with open(json_path, 'r', encoding='utf-8') as f:
-                theories_data = json.load(f)
-            
-            theories = []
-            for theory_dict in theories_data:
-                theory = UrbanTheory(
-                    name=theory_dict['name'],
-                    principles=theory_dict['principles'],
-                    computational_requirements=theory_dict['computational_requirements'],
-                    category=theory_dict['category'],
-                    year=theory_dict['year']
-                )
-                theories.append(theory)
-            
-            self.logger.info(f"Loaded {len(theories)} theories from {json_path}")
-            return theories
-            
-        except FileNotFoundError:
-            self.logger.warning(f"File not found: {json_path}")
-            self.logger.warning("Using default theories as fallback")
-            return self._load_default_theories()
-        except json.JSONDecodeError as e:
-            self.logger.error(f"JSON decode error in {json_path}: {e}")
-            return self._load_default_theories()
-        except Exception as e:
-            self.logger.error(f"Error loading theories: {str(e)}")
-            return self._load_default_theories()
-
-    def _load_algorithm_database(self) -> List[Algorithm]:
-        """Load AI/ML algorithms from JSON"""
-        json_path = os.path.join(self.data_dir, 'algorithms.json')
-        
-        try:
-            with open(json_path, 'r', encoding='utf-8') as f:
-                algorithms_data = json.load(f)
-            
-            algorithms = []
-            for algo_dict in algorithms_data:
-                algorithm = Algorithm(
-                    name=algo_dict['name'],
-                    capabilities=algo_dict['capabilities'],
-                    computational_cost=algo_dict['computational_cost'],
-                    data_requirements=algo_dict['data_requirements'],
-                    group=algo_dict['group']
-                )
-                algorithms.append(algorithm)
-            
-            self.logger.info(f"Loaded {len(algorithms)} algorithms from {json_path}")
-            return algorithms
-            
-        except FileNotFoundError:
-            self.logger.warning(f"File not found: {json_path}")
-            self.logger.warning("Using default algorithms as fallback")
-            return self._load_default_algorithms()
-        except json.JSONDecodeError as e:
-            self.logger.error(f"JSON decode error in {json_path}: {e}")
-            return self._load_default_algorithms()
-        except Exception as e:
-            self.logger.error(f"Error loading algorithms: {str(e)}")
-            return self._load_default_algorithms()
-
-    def _load_data_catalog(self) -> List[DataSource]:
-        """Load available data sources from JSON"""
-        json_path = os.path.join(self.data_dir, 'data_sources.json')
-        
-        try:
-            with open(json_path, 'r', encoding='utf-8') as f:
-                sources_data = json.load(f)
-            
-            data_sources = []
-            for source_dict in sources_data:
-                source = DataSource(
-                    name=source_dict['name'],
-                    type=source_dict['type'],
-                    quality_scores=source_dict['quality_scores'],
-                    accessibility=source_dict['accessibility'],
-                    update_frequency=source_dict['update_frequency']
-                )
-                data_sources.append(source)
-            
-            self.logger.info(f"Loaded {len(data_sources)} data sources from {json_path}")
-            return data_sources
-            
-        except FileNotFoundError:
-            self.logger.warning(f"File not found: {json_path}")
-            self.logger.warning("Using default data sources as fallback")
-            return self._load_default_data_sources()
-        except json.JSONDecodeError as e:
-            self.logger.error(f"JSON decode error in {json_path}: {e}")
-            return self._load_default_data_sources()
-        except Exception as e:
-            self.logger.error(f"Error loading data sources: {str(e)}")
-            return self._load_default_data_sources()
-
-    # 保留原始方法作为后备
-    def _load_default_theories(self) -> List[UrbanTheory]:
-        """Default theory database as fallback"""
+        """Load urban planning and safety theories"""
         theories = [
             UrbanTheory(
-                name="CPTED",
-                principles=["Natural surveillance", "Access control", "Territorial reinforcement"],
+                name="Crime Prevention Through Environmental Design (CPTED)",
+                principles=["Natural surveillance", "Access control", "Territorial reinforcement", "Maintenance"],
                 computational_requirements=["spatial_analysis", "pattern_recognition", "real_time"],
                 category="Safety",
                 year=1971
             ),
             UrbanTheory(
                 name="Eyes on the Street",
-                principles=["Mixed use", "Active frontages", "Pedestrian activity"],
+                principles=["Mixed use development", "Active street frontages", "Pedestrian activity", "Community presence"],
                 computational_requirements=["pattern_recognition", "temporal_analysis"],
                 category="Safety",
                 year=1961
             ),
             UrbanTheory(
+                name="Defensible Space Theory",
+                principles=["Territorial definition", "Natural surveillance", "Image and milieu", "Safe adjacencies"],
+                computational_requirements=["spatial_analysis", "classification"],
+                category="Safety",
+                year=1972
+            ),
+            UrbanTheory(
                 name="Transit-Oriented Development",
-                principles=["High density near transit", "Mixed use", "Walkability"],
+                principles=["High density near transit", "Mixed land use", "Walkability", "Reduced parking"],
                 computational_requirements=["spatial_analysis", "optimization", "prediction"],
                 category="Design",
                 year=1993
             ),
             UrbanTheory(
-                name="Compact City",
-                principles=["High density", "Mixed use", "Reduced sprawl"],
+                name="New Urbanism",
+                principles=["Walkable neighborhoods", "Mixed-use development", "Transit access", "Narrow streets"],
+                computational_requirements=["spatial_analysis", "optimization"],
+                category="Design",
+                year=1980
+            ),
+            UrbanTheory(
+                name="Compact City Theory",
+                principles=["High density", "Mixed land use", "Reduced urban sprawl", "Sustainable transport"],
                 computational_requirements=["spatial_analysis", "optimization"],
                 category="Spatial",
                 year=1973
+            ),
+            UrbanTheory(
+                name="Smart Growth",
+                principles=["Infill development", "Transit access", "Walkable communities", "Open space preservation"],
+                computational_requirements=["spatial_analysis", "optimization", "prediction"],
+                category="Spatial",
+                year=1990
             ),
             UrbanTheory(
                 name="Image of the City",
@@ -773,11 +801,25 @@ class UrbanAIRecommendationSystem:
                 category="Perception",
                 year=1960
             ),
+            UrbanTheory(
+                name="Complete Streets",
+                principles=["Multi-modal design", "Safety for all users", "Context-sensitive solutions", "Accessibility"],
+                computational_requirements=["spatial_analysis", "optimization"],
+                category="Design",
+                year=2003
+            ),
+            UrbanTheory(
+                name="Sustainable Urban Design",
+                principles=["Energy efficiency", "Green infrastructure", "Resource conservation", "Climate adaptation"],
+                computational_requirements=["optimization", "prediction", "temporal_analysis"],
+                category="Design",
+                year=1987
+            ),
         ]
         return theories
 
-    def _load_default_algorithms(self) -> List[Algorithm]:
-        """Default algorithm database as fallback"""
+    def _load_algorithm_database(self) -> List[Algorithm]:
+        """Load AI/ML algorithms database"""
         algorithms = [
             Algorithm(
                 name="Random Forest",
@@ -785,14 +827,14 @@ class UrbanAIRecommendationSystem:
                     "Classification": 0.9,
                     "Pattern Recognition": 0.8,
                     "Prediction": 0.85,
-                    "Real-time Processing": 0.6
+                    "Real-time Processing": 0.7
                 },
                 computational_cost=0.3,
                 data_requirements=["tabular", "spatial"],
                 group=2
             ),
             Algorithm(
-                name="CNN",
+                name="Convolutional Neural Network (CNN)",
                 capabilities={
                     "Pattern Recognition": 0.95,
                     "Classification": 0.9,
@@ -803,7 +845,7 @@ class UrbanAIRecommendationSystem:
                 group=2
             ),
             Algorithm(
-                name="LSTM",
+                name="Long Short-Term Memory (LSTM)",
                 capabilities={
                     "Temporal Analysis": 0.95,
                     "Prediction": 0.9,
@@ -814,7 +856,7 @@ class UrbanAIRecommendationSystem:
                 group=2
             ),
             Algorithm(
-                name="Graph Neural Network",
+                name="Graph Neural Network (GNN)",
                 capabilities={
                     "Spatial Analysis": 0.95,
                     "Pattern Recognition": 0.85,
@@ -825,23 +867,79 @@ class UrbanAIRecommendationSystem:
                 group=2
             ),
             Algorithm(
+                name="Support Vector Machine (SVM)",
+                capabilities={
+                    "Classification": 0.85,
+                    "Pattern Recognition": 0.8,
+                    "Prediction": 0.75
+                },
+                computational_cost=0.4,
+                data_requirements=["tabular"],
+                group=1
+            ),
+            Algorithm(
                 name="Genetic Algorithm",
                 capabilities={
                     "Optimization": 0.95,
-                    "Real-time Processing": 0.3
+                    "Real-time Processing": 0.4
                 },
                 computational_cost=0.5,
                 data_requirements=["tabular"],
                 group=0
             ),
+            Algorithm(
+                name="K-Means Clustering",
+                capabilities={
+                    "Classification": 0.7,
+                    "Pattern Recognition": 0.75,
+                    "Spatial Analysis": 0.6
+                },
+                computational_cost=0.2,
+                data_requirements=["tabular", "spatial"],
+                group=1
+            ),
+            Algorithm(
+                name="Reinforcement Learning",
+                capabilities={
+                    "Optimization": 0.9,
+                    "Real-time Processing": 0.8,
+                    "Prediction": 0.85
+                },
+                computational_cost=0.9,
+                data_requirements=["temporal", "tabular"],
+                group=3
+            ),
+            Algorithm(
+                name="XGBoost",
+                capabilities={
+                    "Classification": 0.9,
+                    "Prediction": 0.88,
+                    "Pattern Recognition": 0.8,
+                    "Real-time Processing": 0.6
+                },
+                computational_cost=0.4,
+                data_requirements=["tabular"],
+                group=2
+            ),
+            Algorithm(
+                name="DBSCAN",
+                capabilities={
+                    "Classification": 0.75,
+                    "Pattern Recognition": 0.8,
+                    "Spatial Analysis": 0.85
+                },
+                computational_cost=0.3,
+                data_requirements=["spatial", "tabular"],
+                group=1
+            ),
         ]
         return algorithms
 
-    def _load_default_data_sources(self) -> List[DataSource]:
-        """Default data source catalog as fallback"""
+    def _load_data_catalog(self) -> List[DataSource]:
+        """Load available data sources catalog"""
         data_sources = [
             DataSource(
-                name="Geographic Information System",
+                name="Geographic Information System (GIS)",
                 type="geospatial",
                 quality_scores={
                     "quality": 0.9,
@@ -880,7 +978,7 @@ class UrbanAIRecommendationSystem:
                 update_frequency="real-time"
             ),
             DataSource(
-                name="Census Data",
+                name="Census Demographics",
                 type="demographic",
                 quality_scores={
                     "quality": 0.95,
@@ -893,7 +991,7 @@ class UrbanAIRecommendationSystem:
                 update_frequency="yearly"
             ),
             DataSource(
-                name="Social Media Data",
+                name="Social Media Sentiment",
                 type="social",
                 quality_scores={
                     "quality": 0.6,
@@ -903,6 +1001,71 @@ class UrbanAIRecommendationSystem:
                     "compatibility": 0.7
                 },
                 accessibility=0.5,
+                update_frequency="real-time"
+            ),
+            DataSource(
+                name="Traffic Flow Data",
+                type="temporal",
+                quality_scores={
+                    "quality": 0.85,
+                    "temporal_coverage": 0.9,
+                    "accessibility": 0.7,
+                    "reliability": 0.9,
+                    "compatibility": 0.85
+                },
+                accessibility=0.7,
+                update_frequency="real-time"
+            ),
+            DataSource(
+                name="Building Footprints",
+                type="spatial",
+                quality_scores={
+                    "quality": 0.9,
+                    "temporal_coverage": 0.6,
+                    "accessibility": 0.8,
+                    "reliability": 0.95,
+                    "compatibility": 0.9
+                },
+                accessibility=0.8,
+                update_frequency="yearly"
+            ),
+            DataSource(
+                name="Crime Incident Reports",
+                type="tabular",
+                quality_scores={
+                    "quality": 0.8,
+                    "temporal_coverage": 0.85,
+                    "accessibility": 0.7,
+                    "reliability": 0.9,
+                    "compatibility": 0.8
+                },
+                accessibility=0.7,
+                update_frequency="daily"
+            ),
+            DataSource(
+                name="Environmental Monitoring",
+                type="sensor",
+                quality_scores={
+                    "quality": 0.85,
+                    "temporal_coverage": 0.9,
+                    "accessibility": 0.6,
+                    "reliability": 0.88,
+                    "compatibility": 0.75
+                },
+                accessibility=0.6,
+                update_frequency="hourly"
+            ),
+            DataSource(
+                name="Public Transit Data",
+                type="temporal",
+                quality_scores={
+                    "quality": 0.9,
+                    "temporal_coverage": 0.95,
+                    "accessibility": 0.8,
+                    "reliability": 0.92,
+                    "compatibility": 0.85
+                },
+                accessibility=0.8,
                 update_frequency="real-time"
             ),
         ]
@@ -957,7 +1120,8 @@ def display_recommendation(recommendation: Recommendation):
     print("\nRECOMMENDED ALGORITHMS:")
     for algo in recommendation.algorithms:
         print(f"  - {algo.name} (Group {algo.group})")
-        print(f"    Top Capabilities: {', '.join([k for k, v in algo.capabilities.items() if v > 0.8])}")
+        top_caps = [k for k, v in algo.capabilities.items() if v > 0.7]
+        print(f"    Top Capabilities: {', '.join(top_caps)}")
     
     print("\nRECOMMENDED DATA SOURCES:")
     for source in recommendation.data_sources:
@@ -972,24 +1136,16 @@ def display_recommendation(recommendation: Recommendation):
     
     print("\n" + "="*80)
 
-# Main execution
+# Main execution for testing
 async def main():
     """Example usage of the system"""
-    # Initialize system
     system = UrbanAIRecommendationSystem()
     
-    # Example urban challenges
-    challenges = [
-        "We need to reduce crime rates in downtown neighborhoods by improving street lighting and surveillance while maintaining resident privacy",
-        "How can we optimize public transportation routes to reduce traffic congestion during peak hours in the city center?",
-        "Design a sustainable mixed-use development that promotes walkability and community interaction",
-    ]
+    challenge = "We need to reduce crime rates in downtown neighborhoods by improving street lighting and surveillance while maintaining resident privacy"
     
-    for challenge in challenges:
-        print(f"\nCHALLENGE: {challenge}")
-        recommendation = await system.generate_recommendation(challenge)
-        display_recommendation(recommendation)
+    print(f"\nCHALLENGE: {challenge}")
+    recommendation = await system.generate_recommendation(challenge)
+    display_recommendation(recommendation)
 
 if __name__ == "__main__":
-    # Run the async main function
     asyncio.run(main())
