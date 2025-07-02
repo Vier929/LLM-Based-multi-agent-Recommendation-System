@@ -2,6 +2,10 @@
 Streamlit Demo for Theory-Driven Multi-Agent Recommendation System
 Interactive interface for urban AI recommendations
 """
+"""
+Streamlit Demo for Theory-Driven Multi-Agent Recommendation System
+Interactive interface for urban AI recommendations
+"""
 
 import streamlit as st
 import asyncio
@@ -14,31 +18,11 @@ import json
 import os
 import sys
 import numpy as np
-import importlib.util
 
-# Import the recommendation system components with special handling for + in filename
+# Import the recommendation system components
 try:
-    # Path to the recommendation+system.py file
-    module_path = r"C:\Users\luvyf\Desktop\recommendation+system.py"
-
-    # Check if file exists
-    if not os.path.exists(module_path):
-        st.error(f"⚠️ File not found: {module_path}")
-        st.error("Please ensure recommendation+system.py exists at C:\\Users\\luvyf\\Desktop\\")
-        st.stop()
-
-    # Use importlib to import file with special characters
-    spec = importlib.util.spec_from_file_location("recommendation_system", module_path)
-    if spec is None:
-        st.error("⚠️ Failed to load module specification")
-        st.stop()
-
-    recommendation_system = importlib.util.module_from_spec(spec)
-    if spec.loader is None:
-        st.error("⚠️ Module loader is None")
-        st.stop()
-
-    spec.loader.exec_module(recommendation_system)
+    # Import directly from the same directory
+    import recommendation_system
 
     # Import required classes from the module
     UrbanAIRecommendationSystem = recommendation_system.UrbanAIRecommendationSystem
@@ -49,12 +33,18 @@ try:
     Recommendation = recommendation_system.Recommendation
     display_recommendation = recommendation_system.display_recommendation
 
+except ImportError as e:
+    st.error(f"⚠️ Could not import the recommendation system. Error: {str(e)}")
+    st.error("Please ensure recommendation_system.py is in the same directory as app.py")
+    st.error(f"Current working directory: {os.getcwd()}")
+    st.error(f"Files in directory: {os.listdir('.')}")
+    st.stop()
+    
 except Exception as e:
     st.error(f"⚠️ Could not import the recommendation system. Error: {str(e)}")
     st.error(f"Error type: {type(e).__name__}")
     st.error(f"Current working directory: {os.getcwd()}")
     import traceback
-
     st.error(f"Traceback: {traceback.format_exc()}")
     st.stop()
 
@@ -368,7 +358,8 @@ def main():
         """)
 
         st.header("🔧 Configuration")
-        data_path = st.text_input("Data Directory", value=r"C:\Users\luvyf\Desktop")
+        # Remove the data_path configuration since we're not using local paths anymore
+        st.write("System configured for cloud deployment")
 
         if st.button("🚀 Initialize System"):
             if initialize_system():
