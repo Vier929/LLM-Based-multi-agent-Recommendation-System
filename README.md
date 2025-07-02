@@ -10,6 +10,9 @@
 [![Streamlit](https://img.shields.io/badge/Streamlit-1.28%2B-red?style=for-the-badge&logo=streamlit)](https://streamlit.io/)
 [![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
 
+## 🌐 **Project Website**
+### **https://vier929.github.io/LLM-Based-multi-agent-Recommendation-System/**
+
 [🚀 **Try Live Demo**](https://llm-based-multi-agent-recommendation-system-eljs4zovvgefco8gzj.streamlit.app/) | [📚 **Documentation**](https://vier929.github.io/LLM-Based-multi-agent-Recommendation-System/) | [🐛 **Report Bug**](https://github.com/Vier929/LLM-Based-multi-agent-Recommendation-System/issues) | [✨ **Request Feature**](https://github.com/Vier929/LLM-Based-multi-agent-Recommendation-System/issues)
 
 </div>
@@ -74,6 +77,9 @@
 
 [**🚀 Launch Interactive Demo →**](https://llm-based-multi-agent-recommendation-system-eljs4zovvgefco8gzj.streamlit.app/)
 
+### 📚 **Complete Documentation & Project Details**
+**🌐 Visit: https://vier929.github.io/LLM-Based-multi-agent-Recommendation-System/**
+
 </div>
 
 ---
@@ -114,6 +120,8 @@ No installation needed! Experience the full system instantly:
 <div align="center">
 
 **🌐 [Try Online Demo](https://llm-based-multi-agent-recommendation-system-eljs4zovvgefco8gzj.streamlit.app/)**
+
+**📚 [Complete Project Website](https://vier929.github.io/LLM-Based-multi-agent-Recommendation-System/)**
 
 </div>
 
@@ -452,6 +460,9 @@ MIT License - Feel free to use, modify, and distribute! 🎉
 ### 🚀 **Ready to Transform Urban AI?**
 
 [🚀 Experience Live Demo](https://llm-based-multi-agent-recommendation-system-eljs4zovvgefco8gzj.streamlit.app/) | [🌐 Visit Project Website](https://vier929.github.io/LLM-Based-multi-agent-Recommendation-System/) | [💻 View Source Code](https://github.com/Vier929/LLM-Based-multi-agent-Recommendation-System)
+
+### 📚 **Complete Project Website**
+## **https://vier929.github.io/LLM-Based-multi-agent-Recommendation-System/**
 
 ---
 
